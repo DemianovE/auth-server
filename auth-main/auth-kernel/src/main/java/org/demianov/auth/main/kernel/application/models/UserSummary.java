@@ -7,10 +7,13 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A lightweight projection of the {@link org.demianov.auth.main.core.domain.models.User} entity for application-layer use cases.
+ * A lightweight projection of the
+ * {@link org.demianov.auth.main.core.domain.models.User}
+ * entity for application-layer use cases.
  * <p>
- *     This record encapsulates identity and lifecycle state, designed for efficient
- *     serialization and transfer within the internal application services.
+ *     This record encapsulates identity and lifecycle state,
+ *     designed for efficient serialization and transfer within
+ *     the internal application services.
  * </p>
  * @param id The unique identifier of the user.
  * @param email The validated {@link Email}.
@@ -26,7 +29,8 @@ public record UserSummary(
 
     /**
      * Canonical constructor with mandatory field validation.
-     * @throws NullPointerException if {@code id}, {@code email}, or {@code status} is null.
+     * @throws NullPointerException if {@code id}, {@code email},
+     * or {@code status} is null.
      */
     public UserSummary {
         Objects.requireNonNull(id, "User id is required");

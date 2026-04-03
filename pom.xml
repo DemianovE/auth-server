@@ -25,6 +25,8 @@
         <spring-crypto.version>6.2.3</spring-crypto.version>
         <spring-jpa.version>3.2.4</spring-jpa.version>
         <hibernate.version>6.4.4.Final</hibernate.version>
+        <h2.version>2.2.224</h2.version>
+
         <junit.version>5.10.2</junit.version>
         <mockito.version>5.10.0</mockito.version>
         <assertj.version>3.27.7</assertj.version>
@@ -34,37 +36,79 @@
         <jakarta-ee.version>10.0.0</jakarta-ee.version>
         <jackson.version>2.17.0</jackson.version>
 
+
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
         <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
         <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
+        <maven-enforce-plugin.version>3.4.1</maven-enforce-plugin.version>
 
         <project.version>0.1.0-alpha</project.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- START AUTH -->
             <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>${junit.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>org.demianov</groupId>
+                <artifactId>auth-kernel</artifactId>
+                <version>${project.version}</version>
             </dependency>
-
             <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>${assertj.version}</version>
+                <groupId>org.demianov</groupId>
+                <artifactId>auth-starter</artifactId>
+                <version>${project.version}</version>
             </dependency>
-
             <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-junit-jupiter</artifactId>
-                <version>${mockito.version}</version>
+                <groupId>org.demianov</groupId>
+                <artifactId>auth-infrastructure-jwt</artifactId>
+                <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.demianov</groupId>
+                <artifactId>auth-infrastructure-crypto</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.demianov</groupId>
+                <artifactId>auth-persistence-jpa</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.demianov</groupId>
+                <artifactId>auth-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.demianov</groupId>
+                <artifactId>auth-sdk</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- END AUTH -->
 
+            <!-- START LOMBOK -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <!-- END LOMBOK -->
+
+            <!-- START SPRING -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-crypto</artifactId>
+                <version>${spring-crypto.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-jpa</artifactId>
+                <version>${spring-jpa.version}</version>
+                <scope>compile</scope>
+            </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
@@ -72,7 +116,62 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- END SPRING -->
 
+            <!-- START JWT -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <!-- END JWT -->
+
+            <!-- START DB -->
+            <dependency>
+                <groupId>org.hibernate.orm</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- END DB -->
+
+            <!-- START TEST -->
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-junit-jupiter</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+            <!-- END TEST -->
+
+
+            <!-- START DOP -->
             <dependency>
                 <groupId>jakarta.platform</groupId>
                 <artifactId>jakarta.jakartaee-bom</artifactId>
@@ -84,7 +183,7 @@
             <dependency>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.4.1</version>
+                <version>${maven-enforce-plugin.version}</version>
             </dependency>
 
             <dependency>
@@ -94,6 +193,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- END DOP -->
         </dependencies>
     </dependencyManagement>
 
@@ -157,7 +257,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.4.1</version>
                 <executions>
                     <execution>
                         <id>enforce-no-spring</id>

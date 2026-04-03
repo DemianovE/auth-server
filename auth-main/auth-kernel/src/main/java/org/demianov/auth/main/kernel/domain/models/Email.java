@@ -12,7 +12,7 @@ import org.demianov.auth.main.kernel.exceptions.base.WrongParametersException;
  *    propagating through the application layers.
  * </p>
  * <p>
- *     For such purposes <b>REGEX</b> pater {@link #EMAIL_PATTERN} is applied.
+ *     For such purposes <b>REGEX</b> patern {@link #EMAIL_PATTERN} is applied.
  * </p>
  *
  * @param value the raw string representation of the email address.

@@ -8,7 +8,7 @@ import java.util.UUID;
 
 /**
  * A lightweight projection of the
- * {@link org.demianov.auth.main.core.domain.models.User}
+ * {@code User}
  * entity for application-layer use cases.
  * <p>
  *     This record encapsulates identity and lifecycle state,

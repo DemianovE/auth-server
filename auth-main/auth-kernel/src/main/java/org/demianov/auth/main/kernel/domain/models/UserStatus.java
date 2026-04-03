@@ -2,7 +2,7 @@ package org.demianov.auth.main.kernel.domain.models;
 
 /**
  * Represents the lifecycle state of a
- * {@link org.demianov.auth.main.core.domain.models.User}.
+ * {@code User}.
  *
  * <p>
  *     The status determines the operational capabilities of

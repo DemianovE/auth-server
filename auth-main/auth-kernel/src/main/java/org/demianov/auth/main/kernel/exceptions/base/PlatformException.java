@@ -2,7 +2,7 @@ package org.demianov.auth.main.kernel.exceptions.base;
 
 
 /**
- * The base exception for the authentification platform.
+ * The base exception for the authentication platform.
  * <p>
  *     THis class serves as the root for all domain and infrastructure
  *     exceptions, providing all the necessary data for mapping to a
@@ -22,9 +22,9 @@ package org.demianov.auth.main.kernel.exceptions.base;
 
     /**
      * Canonical Constructor available only to base exceptions.
-     * @param message - error message.
-     * @param errorTag - error tag.
-     * @param statusCode - status code.
+     * @param message error message.
+     * @param errorTag error tag.
+     * @param statusCode status code.
      */
     protected PlatformException(
             final String message,

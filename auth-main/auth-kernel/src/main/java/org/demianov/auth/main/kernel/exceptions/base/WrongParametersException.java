@@ -4,7 +4,7 @@ package org.demianov.auth.main.kernel.exceptions.base;
  * Throws exception when the API consumer provides a wrong set of parameters.
  * <p>
  *     This exception triggers a 400 Bad Request response in the web
- *     layer and provides a standardized {@code WRONG_PARAMETERS} error
+ *     layer and provides a standardized {@code BAD_REQUEST} error
  *     code for API consumers.
  * </p>
  * @see PlatformException
@@ -14,7 +14,7 @@ public class WrongParametersException extends PlatformException {
 
     /**
      * Canonical Constructor for the wrong parameters' exception.
-     * @param message - error message.
+     * @param message error message.
      */
     public WrongParametersException(final String message) {
         super(

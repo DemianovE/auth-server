@@ -15,7 +15,7 @@ public class EntityNotFoundException extends PlatformException {
 
     /**
      * Canonical Constructor for the not found entity exception.
-     * @param message - error message.
+     * @param message error message.
      */
     public EntityNotFoundException(final String message) {
         super(

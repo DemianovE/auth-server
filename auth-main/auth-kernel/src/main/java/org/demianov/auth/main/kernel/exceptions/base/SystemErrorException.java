@@ -13,15 +13,8 @@ package org.demianov.auth.main.kernel.exceptions.base;
 public class SystemErrorException extends PlatformException {
 
     /**
-     * Private constructor to prevent instantiation.
-     * @param message - error message.
-     */
-    private SystemErrorException(final String message) {
-        super(message, null, 0);
-    }
-
-    /**
      * Canonical constructor. 500 Internal Server Error.
+     * @implNote The error message is "An unexpected internal error occurred".
      */
     public SystemErrorException() {
         super(

@@ -40,7 +40,7 @@
         <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
 
-        <project.version>1.0-SNAPSHOT</project.version>
+        <project.version>0.1.0-alpha</project.version>
     </properties>
 
     <dependencyManagement>

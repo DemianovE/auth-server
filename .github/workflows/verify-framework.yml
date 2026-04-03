@@ -1,0 +1,49 @@
+name: Framework Quality Gate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    name: Build, Test and Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SDK 21
+        uses: actions/setup-java@v4
+
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Maven Verify (Build and Test)
+        run: mvn -B clean verify
+
+      - name: Lint & Docs
+        run: mvn checkstyle:check javadoc:javadoc
+
+      - name: Generate Coverage Report
+        run: mvn jacoco:report
+
+      - name: Upload Coverage Report
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload Test Report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: "**/target/surefire-reports/*.xml"
+
+      - name: Success Summary
+        if: success()
+        run: echo "Code meets framework quality standards (Tests, Javadoc, and Architecture)."

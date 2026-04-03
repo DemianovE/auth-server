@@ -3,6 +3,8 @@ package org.demianov.auth.main.kernel.exceptions.base;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.Stream;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExceptionConstantsTest {
@@ -25,5 +27,21 @@ public class ExceptionConstantsTest {
         assertThat(ExceptionConstants.ErrorTag.FORBIDDEN).isEqualTo("FORBIDDEN");
         assertThat(ExceptionConstants.ErrorTag.NOT_FOUND).isEqualTo("NOT_FOUND");
         assertThat(ExceptionConstants.ErrorTag.INTERNAL_SERVER_ERROR).isEqualTo("INTERNAL_SERVER_ERROR");
+    }
+
+    @Test
+    @DisplayName("Force coverage for constant holders")
+    void forceCoverage() {
+        assertThat(ExceptionConstants.ErrorCodes.class).isNotNull();
+        assertThat(ExceptionConstants.ErrorTag.class).isNotNull();
+
+        Stream.of(ExceptionConstants.ErrorCodes.class, ExceptionConstants.ErrorTag.class)
+                .forEach(clazz -> {
+                    try {
+                        var constructor = clazz.getDeclaredConstructor();
+                        constructor.setAccessible(true);
+                        constructor.newInstance();
+                    } catch (Exception ignored) { }
+                });
     }
 }

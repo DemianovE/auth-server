@@ -31,7 +31,6 @@ public final class LoginUseCase implements LoginInputPort {
      * @param userRepoParam user repository.
      * @param passwordHasherParam password hasher.
      * @param dispatcherParam login dispatcher.
-     * @param clockParam clock, used in the whole of a system.
      */
     public LoginUseCase(
             final UserRepoPort userRepoParam,

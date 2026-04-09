@@ -2,8 +2,8 @@ package org.demianov.auth.main.core.application.services.use_case.login;
 
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.demianov.auth.main.core.application.models.LoginResult;
+import org.demianov.auth.main.core.application.ports.in.login.LoginHandler;
 import org.demianov.auth.main.core.application.ports.out.security.TokenGeneratorPort;
-import org.demianov.auth.main.core.application.services.use_case.login.internal.DefaultLoginDispatcher;
 import org.demianov.auth.main.core.domain.models.User;
 
 import org.demianov.auth.main.core.exceptions.HandlerException;

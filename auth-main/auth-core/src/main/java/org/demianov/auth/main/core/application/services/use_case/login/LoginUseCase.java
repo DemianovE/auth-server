@@ -14,7 +14,6 @@ import org.demianov.auth.main.core.exceptions.AuthCoreException;
 import org.demianov.auth.main.core.exceptions.models.user.UserNotFoundException;
 import org.demianov.auth.main.core.exceptions.tags.LoginPortExceptions;
 
-import java.time.Clock;
 import java.util.Objects;
 
 public final class LoginUseCase implements LoginInputPort {
@@ -26,8 +25,6 @@ public final class LoginUseCase implements LoginInputPort {
      * to the appropriate handler.
      */
     private final LoginDispatcher dispatcher;
-    /** The clock, used in the whole of a system. */
-    private final Clock clock;
 
     /**
      * Canonical constructor. Perform mandatory field validation.
@@ -39,16 +36,13 @@ public final class LoginUseCase implements LoginInputPort {
     public LoginUseCase(
             final UserRepoPort userRepoParam,
             final PasswordHasherPort passwordHasherParam,
-            final LoginDispatcher dispatcherParam,
-            final Clock clockParam) {
+            final LoginDispatcher dispatcherParam) {
         this.userRepo = Objects.requireNonNull(userRepoParam,
                 "userRepo cannot be null");
         this.passwordHasher = Objects.requireNonNull(passwordHasherParam,
                 "passwordHasher cannot be null");
         this.dispatcher = Objects.requireNonNull(dispatcherParam,
                 "dispatcher cannot be null");
-        this.clock = Objects.requireNonNull(clockParam,
-                "clock cannot be null");
     }
 
     @Override

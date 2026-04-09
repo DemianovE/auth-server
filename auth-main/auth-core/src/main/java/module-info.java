@@ -2,6 +2,7 @@ module auth.core {
     requires auth.kernel;
 
     exports org.demianov.auth.main.core.domain.models;
+    exports org.demianov.auth.main.core.application.models;
 
     exports org.demianov.auth.main.core.application.ports.in.login;
     exports org.demianov.auth.main.core.application.ports.out.security;

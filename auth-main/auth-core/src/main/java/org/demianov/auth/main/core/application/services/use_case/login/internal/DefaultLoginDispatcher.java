@@ -7,7 +7,6 @@ import org.demianov.auth.main.core.application.services.use_case.login.LoginHand
 import org.demianov.auth.main.core.domain.models.User;
 import org.demianov.auth.main.core.exceptions.HandlerException;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;

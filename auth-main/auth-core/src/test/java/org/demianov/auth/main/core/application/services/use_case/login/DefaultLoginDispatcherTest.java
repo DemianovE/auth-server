@@ -93,14 +93,12 @@ public class DefaultLoginDispatcherTest {
 
         assertThat(result).isInstanceOf(LoginResult.Failure.class)
                 .asInstanceOf(InstanceOfAssertFactories.type(LoginResult.Failure.class))
-                .satisfies(failure -> {
-                    assertThat(failure.exception()).isInstanceOf(HandlerException.class)
-                            .asInstanceOf(InstanceOfAssertFactories.type(HandlerException.class))
-                            .satisfies(handlerException -> {
-                                assertThat(handlerException.getMessage()).isEqualTo(message);
-                                assertThat(handlerException.getCause()).isEqualTo(cause);
-                                assertThat(handlerException.getCause().getMessage()).isEqualTo(cause.getMessage());
-                            });
-                });
+                .satisfies(failure -> assertThat(failure.exception()).isInstanceOf(HandlerException.class)
+                        .asInstanceOf(InstanceOfAssertFactories.type(HandlerException.class))
+                        .satisfies(handlerException -> {
+                            assertThat(handlerException.getMessage()).isEqualTo(message);
+                            assertThat(handlerException.getCause()).isEqualTo(cause);
+                            assertThat(handlerException.getCause().getMessage()).isEqualTo(cause.getMessage());
+                        }));
     }
 }

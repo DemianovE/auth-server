@@ -75,9 +75,7 @@ public class LoginUseCaseTest {
 
         assertThat(result).isInstanceOf(LoginResult.Failure.class)
                 .asInstanceOf(InstanceOfAssertFactories.type(LoginResult.Failure.class))
-                .satisfies(failure -> {
-                    assertThat(failure.exception()).isInstanceOf(UserNotFoundException.class);
-        });
+                .satisfies(failure -> assertThat(failure.exception()).isInstanceOf(UserNotFoundException.class));
 
         verifyNoInteractions(this.dispatcher);
         verify(this.userRepo, times(1)).findByEmail(this.email);

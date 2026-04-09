@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "Starting Pre-Push Quality Check..."
+
+echo "Running Checkstyle..."
+mvn checkstyle:check
+if [ $? -ne 0 ]; then
+    echo "Checkstyle failed! Fix violations before pushing."
+    exit 1
+fi
+
+echo "Quality check passed. Proceeding with push."
+exit 0

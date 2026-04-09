@@ -1,9 +1,10 @@
 package org.demianov.auth.main.core.application.services.use_case.login;
 
+import org.demianov.auth.main.core.application.ports.in.login.LoginDispatcher;
 import org.demianov.auth.main.kernel.domain.models.Email;
 
 import org.demianov.auth.main.core.application.models.LoginResult;
-import org.demianov.auth.main.core.application.ports.in.LoginInputPort;
+import org.demianov.auth.main.core.application.ports.in.login.LoginInputPort;
 import org.demianov.auth.main.core.application.ports.out.security.PasswordHasherPort;
 import org.demianov.auth.main.core.application.ports.out.persistence.UserRepoPort;
 import org.demianov.auth.main.core.application.models.LoginCommand;

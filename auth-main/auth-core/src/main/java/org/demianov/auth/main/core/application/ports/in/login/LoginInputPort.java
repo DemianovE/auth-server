@@ -1,4 +1,4 @@
-package org.demianov.auth.main.core.application.ports.in;
+package org.demianov.auth.main.core.application.ports.in.login;
 
 import org.demianov.auth.main.core.application.models.LoginCommand;
 import org.demianov.auth.main.core.application.models.LoginResult;

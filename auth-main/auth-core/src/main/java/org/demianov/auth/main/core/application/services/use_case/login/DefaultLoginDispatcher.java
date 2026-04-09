@@ -1,9 +1,9 @@
-package org.demianov.auth.main.core.application.services.use_case.login.internal;
+package org.demianov.auth.main.core.application.services.use_case.login;
 
 import org.demianov.auth.main.core.application.models.LoginResult;
 import org.demianov.auth.main.core.application.ports.out.security.TokenGeneratorPort;
-import org.demianov.auth.main.core.application.services.use_case.login.LoginDispatcher;
-import org.demianov.auth.main.core.application.services.use_case.login.LoginHandler;
+import org.demianov.auth.main.core.application.ports.in.login.LoginDispatcher;
+import org.demianov.auth.main.core.application.ports.in.login.LoginHandler;
 import org.demianov.auth.main.core.domain.models.User;
 import org.demianov.auth.main.core.exceptions.HandlerException;
 

@@ -1,4 +1,4 @@
-package org.demianov.auth.main.core.application.services.use_case.login;
+package org.demianov.auth.main.core.application.ports.in.login;
 
 import org.demianov.auth.main.core.application.models.LoginResult;
 import org.demianov.auth.main.core.domain.models.User;

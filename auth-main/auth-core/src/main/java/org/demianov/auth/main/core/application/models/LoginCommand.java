@@ -13,7 +13,7 @@ import java.util.Objects;
  * @param email user email
  * @param password user password
  *
- * @see org.demianov.auth.main.core.application.ports.in.LoginInputPort
+ * @see org.demianov.auth.main.core.application.ports.in.login.LoginInputPort
  * @since 0.1.0-alpha
  */
 public record LoginCommand(

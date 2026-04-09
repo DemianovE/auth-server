@@ -1,7 +1,7 @@
 package org.demianov.auth.main.core.application.ports.out.security;
 
 import org.demianov.auth.main.core.application.models.LoginResult;
-import org.demianov.auth.main.core.application.ports.in.LoginInputPort;
+import org.demianov.auth.main.core.application.ports.in.login.LoginInputPort;
 import org.demianov.auth.main.core.application.ports.out.persistence.RefreshTokenRepoPort;
 
 import org.demianov.auth.main.core.domain.models.User;

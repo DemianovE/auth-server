@@ -22,7 +22,7 @@ import java.util.Objects;
  *     </ul>
  * </p>
  *
- * @see org.demianov.auth.main.core.application.ports.in.LoginInputPort
+ * @see org.demianov.auth.main.core.application.ports.in.login.LoginInputPort
  * @since 0.1.0-alpha
  */
 public sealed interface LoginResult {

@@ -1,6 +1,6 @@
 package org.demianov.auth.main.core.application.ports.out.security;
 
-import org.demianov.auth.main.core.application.models.LoginResult;
+import org.demianov.auth.main.core.application.models.TokenPair;
 import org.demianov.auth.main.core.application.ports.in.login.LoginInputPort;
 import org.demianov.auth.main.core.application.ports.out.persistence.RefreshTokenRepoPort;
 
@@ -39,23 +39,16 @@ public interface TokenGeneratorPort {
      *     As well as achieving the refresh token saving.
      *     Note that the Success record performs null-checks on its components
      * </p>
-     * <p>
-     *     This function catches specific exceptions and
-     *     passess them to the output {@link LoginResult.Failure}.
-     *     These exceptions are:
-     *     <ul>
-     *         <li>{@link DataAccessException} - any issue with
-     *              infrastructure.</li>
-     *         <li>{@link TokenInspectorPortException} - errors specific to
-     *             {@link TokenInspectorPort}.</li>
-     *         <li>{@link SecureStringGeneratorPortException} - errors
-     *              specific to {@link SecureStringGeneratorPort}</li>
-     *     </ul>
-     * </p>
      * @param user user to generate the token pair for.
+     * @throws DataAccessException if any error occurs on
+     *  an infrastructure level.
+     * @throws TokenInspectorPortException if any error occurs on
+     * in {@link TokenInspectorPort} level.
+     * @throws SecureStringGeneratorPortException if any error occurs on
+     * in {@link SecureStringGeneratorPort} level.
      * @return DTO of the generated token pair.
      */
-    LoginResult generate(User user);
+    TokenPair generate(User user);
 
     /**
      * Perform refresh token generation.
@@ -64,27 +57,18 @@ public interface TokenGeneratorPort {
      *     replacing it with a new pair of tokens.
      * </p>
      * <p>
-     *     This function wraps the specific exception, including
+     *     This function throws the specific exception, including
      *     those potentially thrown during the token generation phase
-     *     {@link #generate(User)},
-     *     with {@link LoginResult.Failure}. From the refresh part these
-     *     exceptions are:
-     *     <ul>
-     *         <li>{@link DataAccessException} - any issue
-     *              with infrastructure.</li>
-     *         <li>{@link TokenNotFoundException}
-     *              - the token
-     *              was not found.</li>
-     *         <li>{@link UserNotFoundException}
-     *              - the user
-     *              was not found.</li>
-     *     </ul>
+     *     {@link #generate(User)}.
      * </p>
      * <p>
      *     The flow first creates a new pair of tokens, then deletes it.
      * </p>
      * @param tokenValue the refresh token to be used for refreshing.
+     * @throws DataAccessException if any error occurs on in frustum level.
+     * @throws TokenNotFoundException if the token is not found.
+     * @throws UserNotFoundException if the user is not found.
      * @return new token pair in DTO.
      */
-    LoginResult refresh(String tokenValue);
+    TokenPair refresh(String tokenValue);
 }

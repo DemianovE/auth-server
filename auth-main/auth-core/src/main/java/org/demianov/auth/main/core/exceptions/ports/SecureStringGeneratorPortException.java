@@ -8,7 +8,7 @@ import org.demianov.auth.main.core.exceptions.tags.LoginPortExceptions;
  * operation failed. Should be used by the developers
  * implementing the secure string generator port.
  */
-public class SecureStringGeneratorPortException extends AuthCoreException
+public final class SecureStringGeneratorPortException extends AuthCoreException
         implements LoginPortExceptions {
 
     /**

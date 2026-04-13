@@ -6,7 +6,7 @@ import org.demianov.auth.main.core.exceptions.tags.LoginPortExceptions;
 /**
  * Throws exception when the password is incorrect.
  */
-public class PasswordMismatchException extends AuthCoreException
+public final class PasswordMismatchException extends AuthCoreException
         implements LoginPortExceptions {
 
     /**

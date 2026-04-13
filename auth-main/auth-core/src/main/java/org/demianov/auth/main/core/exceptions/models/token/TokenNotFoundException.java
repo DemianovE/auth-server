@@ -6,7 +6,7 @@ import org.demianov.auth.main.core.exceptions.tags.LoginPortExceptions;
 /**
  * Exception thrown when a token is not found.
  */
-public class TokenNotFoundException extends AuthCoreException
+public final class TokenNotFoundException extends AuthCoreException
         implements LoginPortExceptions {
 
     /**

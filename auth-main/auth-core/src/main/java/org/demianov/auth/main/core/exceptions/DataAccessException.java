@@ -6,7 +6,7 @@ import org.demianov.auth.main.core.exceptions.tags.LoginPortExceptions;
  * Throws when the data access operation failed.
  * @since 0.1.0-alpha
  */
-public class DataAccessException extends AuthCoreException
+public final class DataAccessException extends AuthCoreException
         implements LoginPortExceptions {
 
     /**

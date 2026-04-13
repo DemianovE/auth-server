@@ -7,7 +7,7 @@ import org.demianov.auth.main.core.exceptions.tags.LoginPortExceptions;
  * Exception thrown when the token inspector port operation failed.
  * Should be used by the developers implementing the token inspector port.
  */
-public class TokenInspectorPortException extends AuthCoreException
+public final class TokenInspectorPortException extends AuthCoreException
         implements LoginPortExceptions {
 
     /**

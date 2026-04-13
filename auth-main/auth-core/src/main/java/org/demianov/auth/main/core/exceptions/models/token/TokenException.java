@@ -7,7 +7,7 @@ import org.demianov.auth.main.core.exceptions.tags.LoginPortExceptions;
  * Exception thrown when the token is invalid in any way.
  * @since 0.1.0-alpha
  */
-public class TokenException extends AuthCoreException
+public final class TokenException extends AuthCoreException
         implements LoginPortExceptions {
 
     /**

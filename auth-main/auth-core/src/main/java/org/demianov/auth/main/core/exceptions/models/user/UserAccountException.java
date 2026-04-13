@@ -7,7 +7,7 @@ import org.demianov.auth.main.core.exceptions.tags.LoginPortExceptions;
  * Exception thrown when the user account
  * is not suited for the action.
  */
-public class UserAccountException extends AuthCoreException
+public final class UserAccountException extends AuthCoreException
         implements LoginPortExceptions {
 
     /**

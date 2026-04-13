@@ -7,7 +7,7 @@ import org.demianov.auth.main.core.exceptions.tags.LoginPortExceptions;
  * Exception thrown when the password hasher port operation failed.
  * Should be used by the developers implementing the password hasher port.
  */
-public class PasswordHasherPortException extends AuthCoreException
+public final class PasswordHasherPortException extends AuthCoreException
         implements LoginPortExceptions {
 
     /**

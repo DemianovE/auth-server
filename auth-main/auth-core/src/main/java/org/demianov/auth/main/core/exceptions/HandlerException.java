@@ -6,7 +6,7 @@ import org.demianov.auth.main.core.exceptions.tags.LoginPortExceptions;
  * Throws exception when an error occurs in the handler.
  * @since 0.1.0-alpha
  */
-public class HandlerException extends AuthCoreException
+public final class HandlerException extends AuthCoreException
         implements LoginPortExceptions {
 
     /**

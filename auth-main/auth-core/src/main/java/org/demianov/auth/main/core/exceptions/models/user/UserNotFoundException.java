@@ -8,7 +8,7 @@ import java.util.UUID;
 /**
  * Exception thrown when a user is not found in the domain.
  */
-public class UserNotFoundException extends AuthCoreException
+public final class UserNotFoundException extends AuthCoreException
         implements LoginPortExceptions {
     /**
      * Canonical constructor.

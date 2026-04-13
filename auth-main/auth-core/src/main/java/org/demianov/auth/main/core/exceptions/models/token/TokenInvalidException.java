@@ -6,7 +6,7 @@ import org.demianov.auth.main.core.exceptions.tags.LoginPortExceptions;
 /**
  * Exception thrown when the token is invalid or expired.
  */
-public class TokenInvalidException  extends AuthCoreException
+public final class TokenInvalidException  extends AuthCoreException
         implements LoginPortExceptions {
 
     /**

@@ -6,7 +6,13 @@ import org.demianov.auth.main.core.domain.models.User;
 /**
  * The dispatcher of the login process.
  * <p>
- *     Is used for the ende-cases configuration.
+ *     This dispatcher can be used
+ *     to modify the output of the login process.
+ *     As example: MFA.
+ * </p>
+ *
+ * <p>
+ *     The default implementation changes nothing.
  * </p>
  *
  * @since 0.1.0-alpha
@@ -15,15 +21,9 @@ public interface LoginDispatcher {
 
     /**
      * Perform login dispatch action.
-     * <p>
-     *     The dispatcher should handle the handler possible
-     *     exceptions which are in type
-     *     {@link org.demianov.auth.main.core.exceptions.HandlerException}.
-     *     This exception should be wraped in the
-     *     {@link LoginResult.Failure}.
-     * </p>
      * @param user user to login.
-     * @return generated token pairs' DTO response.
+     * @param result login result.
+     * @return modified result.
      */
-    LoginResult dispatch(User user);
+    LoginResult dispatch(LoginResult result, User user);
 }

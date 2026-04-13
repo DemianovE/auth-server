@@ -36,6 +36,11 @@ import org.demianov.auth.main.core.exceptions.tags.LoginPortExceptions;
  *              failed;</li>
  *     </ul>
  * </p>
+ * <p>
+ *     Additionaly, a use-case can have {@link CriticalLoginHandler}.
+ *     If any of them throws the exceptions, the flow will be stopped
+ *     and the {@link LoginResult.Failure} will be returned.
+ * </p>
  *
  * @since 0.1.0-alpha
  */

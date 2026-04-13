@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class UserSummaryTest {
 
     private final UUID id = UUID.randomUUID();
-    private final Email email = new Email("test@email.com");
+    private final Email email = Email.of("test@email.com");
     private final UserStatus status = UserStatus.ACTIVE;
 
     @Test

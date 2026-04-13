@@ -23,8 +23,8 @@ public class EmailTest {
     })
     @DisplayName("Should create Email for valid forms")
     void constructor_Success(String email) {
-        assertThatCode(() -> new Email(email)).doesNotThrowAnyException();
-        assertThat(new Email(email).value()).isEqualTo(email);
+        assertThatCode(() -> Email.of(email)).doesNotThrowAnyException();
+        assertThat(Email.of(email).value()).isEqualTo(email);
     }
 
     @ParameterizedTest
@@ -40,7 +40,7 @@ public class EmailTest {
     })
     @DisplayName("Should throw WrongParametersException for invalid forms")
     void constructor_WrongParametersException(String email) {
-        assertThatThrownBy(() -> new Email(email)).isInstanceOf(WrongParametersException.class).hasMessage("Invalid email format: " + email);
+        assertThatThrownBy(() -> Email.of(email)).isInstanceOf(WrongParametersException.class).hasMessage("Invalid email format: " + email);
     }
 
     @Test
@@ -61,6 +61,6 @@ public class EmailTest {
     @DisplayName("Should obey Value Object between factory and new")
     void staticFactory_of() {
         String val = "test@example.com";
-        assertThat(Email.of(val)).isEqualTo(new Email(val));
+        assertThat(Email.of(val)).isEqualTo(Email.of(val));
     }
 }

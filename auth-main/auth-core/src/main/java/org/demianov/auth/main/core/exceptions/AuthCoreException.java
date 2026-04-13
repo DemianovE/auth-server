@@ -26,4 +26,12 @@ public abstract class AuthCoreException extends RuntimeException {
     public AuthCoreException(final String message, final Throwable cause) {
         super(message, cause);
     }
+
+    /**
+     * Constructor with a custom exception.
+     * @param exception the exception.
+     */
+    public AuthCoreException(final Exception exception) {
+        super(exception);
+    }
 }

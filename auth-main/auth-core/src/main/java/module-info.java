@@ -1,5 +1,5 @@
 module auth.core {
-    requires auth.kernel;
+    requires transitive auth.kernel;
 
     exports org.demianov.auth.main.core.domain.models;
     exports org.demianov.auth.main.core.application.models;
@@ -8,6 +8,9 @@ module auth.core {
     exports org.demianov.auth.main.core.application.ports.out.security;
     exports org.demianov.auth.main.core.application.ports.out.persistence;
 
+    exports org.demianov.auth.main.core.exceptions;
+
     opens org.demianov.auth.main.core.application.services.domain_services to spring.core, spring.beans, spring.context;
     opens org.demianov.auth.main.core.application.services.use_case.login to spring.core, spring.beans, spring.context;
+    exports org.demianov.auth.main.core.application.ports.out.listeners;
 }

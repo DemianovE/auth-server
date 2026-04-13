@@ -1,6 +1,6 @@
 package org.demianov.auth.main.core.application.services.domain_services;
 
-import org.demianov.auth.main.core.application.models.LoginResult;
+import org.demianov.auth.main.core.application.models.TokenPair;
 import org.demianov.auth.main.core.application.ports.out.persistence.RefreshTokenRepoPort;
 import org.demianov.auth.main.core.application.ports.out.security.SecureStringGeneratorPort;
 import org.demianov.auth.main.core.application.ports.out.security.TokenGeneratorPort;
@@ -10,11 +10,8 @@ import org.demianov.auth.main.core.application.ports.out.persistence.UserRepoPor
 import org.demianov.auth.main.core.domain.models.RefreshToken;
 import org.demianov.auth.main.core.domain.models.User;
 
-import org.demianov.auth.main.core.exceptions.ports.TokenInspectorPortException;
 import org.demianov.auth.main.core.exceptions.models.token.TokenNotFoundException;
 import org.demianov.auth.main.core.exceptions.models.user.UserNotFoundException;
-import org.demianov.auth.main.core.exceptions.ports.SecureStringGeneratorPortException;
-import org.demianov.auth.main.core.exceptions.DataAccessException;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -77,54 +74,41 @@ public final class TokenGeneratorService implements TokenGeneratorPort {
     }
 
     @Override
-    public LoginResult generate(final User user) {
-        try {
-            Instant now = this.clock.instant();
+    public TokenPair generate(final User user) {
+        Instant now = this.clock.instant();
 
-            String accessToken = this.tokenInspector.generateAccessToken(user);
+        String accessToken = this.tokenInspector.generateAccessToken(user);
 
-            RefreshToken refreshToken = RefreshToken.create(
-                    UUID.randomUUID(),
-                    this.secureStringGenerator.generate(),
-                    user.getId(),
-                    now.plus(this.refreshTokenTtl)
-            );
+        RefreshToken refreshToken = RefreshToken.create(
+                UUID.randomUUID(),
+                this.secureStringGenerator.generate(),
+                user.getId(),
+                now.plus(this.refreshTokenTtl)
+        );
 
-            this.refreshTokenRepo.save(refreshToken);
+        this.refreshTokenRepo.save(refreshToken);
 
-            return new LoginResult.Success(
-                    accessToken,
-                    refreshToken.getToken(),
-                    this.accessTokenTtl,
-                    this.refreshTokenTtl);
-
-        } catch (DataAccessException
-                 | TokenInspectorPortException
-                 | SecureStringGeneratorPortException e) {
-            return new LoginResult.Failure(e);
-        }
+        return new TokenPair(
+                accessToken,
+                refreshToken.getToken(),
+                this.accessTokenTtl,
+                this.refreshTokenTtl);
     }
 
     @Override
-    public LoginResult refresh(final String tokenId) {
-        try {
-            RefreshToken refreshToken = this.refreshTokenRepo.findByToken(
-                    tokenId)
-                    .orElseThrow(TokenNotFoundException::new);
+    public TokenPair refresh(final String tokenId) {
+        RefreshToken refreshToken =
+                this.refreshTokenRepo.findByToken(tokenId)
+                .orElseThrow(TokenNotFoundException::new);
 
-            refreshToken.validate(Instant.now(this.clock));
+        refreshToken.validate(Instant.now(this.clock));
 
-            User user = this.userRepo.findById(refreshToken.getUserId())
-                    .orElseThrow(() -> new UserNotFoundException(
-                            refreshToken.getUserId()));
+        User user = this.userRepo.findById(refreshToken.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(
+                        refreshToken.getUserId()));
 
-            LoginResult result = generate(user);
-            this.refreshTokenRepo.delete(refreshToken);
-            return result;
-        } catch (DataAccessException
-                 | TokenNotFoundException
-                 | UserNotFoundException e) {
-            return new LoginResult.Failure(e);
-        }
+        TokenPair result = generate(user);
+        this.refreshTokenRepo.delete(refreshToken);
+        return result;
     }
 }

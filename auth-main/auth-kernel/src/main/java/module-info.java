@@ -7,5 +7,8 @@ module auth.kernel {
     exports org.demianov.auth.main.kernel.application.ports.in;
     exports org.demianov.auth.main.kernel.application.models;
 
+    exports org.demianov.auth.main.kernel.api;
+
     exports org.demianov.auth.main.kernel.exceptions.base to auth.core, auth.sdk;
+    exports org.demianov.auth.main.kernel.application.annotations to auth.core;
 }

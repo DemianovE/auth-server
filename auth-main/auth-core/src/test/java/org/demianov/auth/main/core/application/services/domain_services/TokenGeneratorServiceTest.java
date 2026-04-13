@@ -2,6 +2,7 @@ package org.demianov.auth.main.core.application.services.domain_services;
 
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.demianov.auth.main.core.application.models.LoginResult;
+import org.demianov.auth.main.core.application.models.TokenPair;
 import org.demianov.auth.main.core.application.ports.out.persistence.RefreshTokenRepoPort;
 import org.demianov.auth.main.core.application.ports.out.persistence.UserRepoPort;
 import org.demianov.auth.main.core.application.ports.out.security.SecureStringGeneratorPort;
@@ -66,17 +67,12 @@ public class TokenGeneratorServiceTest {
         when(this.tokenInspector.generateAccessToken(user)).thenReturn(mockAccessToken);
         when(this.secureStringGenerator.generate()).thenReturn(mockSecureString);
 
-        LoginResult result = this.service.generate(user);
+        TokenPair result = this.service.generate(user);
 
-        assertThat(result).isInstanceOf(LoginResult.Success.class)
-                        .asInstanceOf(InstanceOfAssertFactories.type(LoginResult.Success.class))
-                                .satisfies(success -> {
-                                    assertThat(success.accessToken()).isEqualTo(mockAccessToken);
-                                    assertThat(success.refreshToken()).isEqualTo(mockSecureString);
-                                    assertThat(success.refreshTokenTtl()).isEqualTo(this.refreshTtl);
-                                    assertThat(success.expiresIn()).isEqualTo(this.accessTtl);
-                                });
-
+        assertThat(result.accessToken()).isEqualTo(mockAccessToken);
+        assertThat(result.refreshToken()).isEqualTo(mockSecureString);
+        assertThat(result.expiresIn()).isEqualTo(this.accessTtl);
+        assertThat(result.refreshTokenTtl()).isEqualTo(this.refreshTtl);
 
         ArgumentCaptor<RefreshToken> captor = ArgumentCaptor.forClass(RefreshToken.class);
         verify(this.refreshTokenRepo).save(captor.capture());
@@ -88,7 +84,7 @@ public class TokenGeneratorServiceTest {
     }
 
     @Test
-    @DisplayName("Should return wrapped DataAccessException")
+    @DisplayName("Should throw DataAccessException")
     void generate_DataAccessException() {
         User user = mock(User.class);
 
@@ -96,21 +92,14 @@ public class TokenGeneratorServiceTest {
         Throwable cause = new RuntimeException(message);
         when(this.tokenInspector.generateAccessToken(user)).thenThrow(new DataAccessException(message, cause));
 
-        LoginResult result = this.service.generate(user);
-
-        assertThat(result).isInstanceOf(LoginResult.Failure.class)
-                .asInstanceOf(InstanceOfAssertFactories.type(LoginResult.Failure.class))
-                .satisfies(failure -> assertThat(failure.exception()).isInstanceOf(DataAccessException.class)
-                        .asInstanceOf(InstanceOfAssertFactories.type(DataAccessException.class))
-                        .satisfies(dataAccessException -> {
-                            assertThat(dataAccessException.getMessage()).isEqualTo(message);
-                            assertThat(dataAccessException.getCause()).isEqualTo(cause);
-                            assertThat(dataAccessException.getCause().getMessage()).isEqualTo(cause.getMessage());
-                        }));
+        assertThatThrownBy(() -> this.service.generate(user))
+                .isInstanceOf(DataAccessException.class)
+                .hasMessage(message)
+                .hasCause(cause);
     }
 
     @Test
-    @DisplayName("Should return wrapped TokenInspectorPortException")
+    @DisplayName("Should throw TokenInspectorPortException")
     void generate_TokenInspectorPortException() {
         User user = mock(User.class);
 
@@ -118,21 +107,14 @@ public class TokenGeneratorServiceTest {
         Throwable cause = new RuntimeException(message);
         when(this.tokenInspector.generateAccessToken(user)).thenThrow(new TokenInspectorPortException(message, cause));
 
-        LoginResult result = this.service.generate(user);
-
-        assertThat(result).isInstanceOf(LoginResult.Failure.class)
-                .asInstanceOf(InstanceOfAssertFactories.type(LoginResult.Failure.class))
-                .satisfies(failure -> assertThat(failure.exception()).isInstanceOf(TokenInspectorPortException.class)
-                        .asInstanceOf(InstanceOfAssertFactories.type(TokenInspectorPortException.class))
-                        .satisfies(dataAccessException -> {
-                            assertThat(dataAccessException.getMessage()).isEqualTo(message);
-                            assertThat(dataAccessException.getCause()).isEqualTo(cause);
-                            assertThat(dataAccessException.getCause().getMessage()).isEqualTo(cause.getMessage());
-                        }));
+        assertThatThrownBy(() -> this.service.generate(user))
+                .isInstanceOf(TokenInspectorPortException.class)
+                .hasMessage(message)
+                .hasCause(cause);
     }
 
     @Test
-    @DisplayName("Should return wrapped SecureStringGeneratorPortException")
+    @DisplayName("Should throw SecureStringGeneratorPortException")
     void generate_SecureStringGeneratorPortException() {
         User user = mock(User.class);
 
@@ -140,17 +122,10 @@ public class TokenGeneratorServiceTest {
         Throwable cause = new RuntimeException(message);
         when(this.tokenInspector.generateAccessToken(user)).thenThrow(new SecureStringGeneratorPortException(message, cause));
 
-        LoginResult result = this.service.generate(user);
-
-        assertThat(result).isInstanceOf(LoginResult.Failure.class)
-                .asInstanceOf(InstanceOfAssertFactories.type(LoginResult.Failure.class))
-                .satisfies(failure -> assertThat(failure.exception()).isInstanceOf(SecureStringGeneratorPortException.class)
-                        .asInstanceOf(InstanceOfAssertFactories.type(SecureStringGeneratorPortException.class))
-                        .satisfies(dataAccessException -> {
-                            assertThat(dataAccessException.getMessage()).isEqualTo(message);
-                            assertThat(dataAccessException.getCause()).isEqualTo(cause);
-                            assertThat(dataAccessException.getCause().getMessage()).isEqualTo(cause.getMessage());
-                        }));
+        assertThatThrownBy(() -> this.service.generate(user))
+                .isInstanceOf(SecureStringGeneratorPortException.class)
+                .hasMessage(message)
+                .hasCause(cause);
     }
 
     @Test
@@ -186,34 +161,34 @@ public class TokenGeneratorServiceTest {
         when(this.tokenInspector.generateAccessToken(user)).thenReturn(newAccessToken);
         when(this.secureStringGenerator.generate()).thenReturn(newRefreshToken);
 
-        LoginResult result = this.service.refresh(oldTokenStr);
+        TokenPair result = this.service.refresh(oldTokenStr);
 
-        assertThat(result).isInstanceOf(LoginResult.Success.class)
-                .asInstanceOf(InstanceOfAssertFactories.type(LoginResult.Success.class))
-                .satisfies(success -> {
-                    assertThat(success.accessToken()).isEqualTo(newAccessToken);
-                    assertThat(success.refreshToken()).isEqualTo(newRefreshToken);
-                    assertThat(success.refreshTokenTtl()).isEqualTo(this.refreshTtl);
-                    assertThat(success.expiresIn()).isEqualTo(this.accessTtl);
-                });
+        assertThat(result.accessToken()).isEqualTo(newAccessToken);
+        assertThat(result.refreshToken()).isEqualTo(newRefreshToken);
+        assertThat(result.expiresIn()).isEqualTo(this.accessTtl);
+        assertThat(result.refreshTokenTtl()).isEqualTo(this.refreshTtl);
 
         verify(this.refreshTokenRepo, times(1)).delete(oldToken);
         verify(this.refreshTokenRepo, times(1)).save(any(RefreshToken.class));
     }
 
     @Test
-    @DisplayName("Should return wrapped TokenNotFoundException for invalid token")
+    @DisplayName("Should throw TokenNotFoundException for invalid token")
     void refresh_TokenNotFoundException() {
         String invalidToken = "invalid-token";
 
         when(this.refreshTokenRepo.findByToken(invalidToken)).thenReturn(Optional.empty());
 
-        LoginResult result = this.service.refresh(invalidToken);
-        assertFailureContains(result, TokenNotFoundException.class);
+        assertThatThrownBy(() -> this.service.refresh(invalidToken))
+                .isInstanceOf(TokenNotFoundException.class)
+                .hasMessage("Token not missing or non existing.")
+                .hasNoCause();
+
+        verify(this.refreshTokenRepo, times(1)).findByToken(invalidToken);
     }
 
     @Test
-    @DisplayName("Should return wrapped UserNotFoundException for invalid user")
+    @DisplayName("Should throw UserNotFoundException for invalid user")
     void refresh_UserNotFoundException() {
         String invalidToken = "invalid-token";
         UUID userId = UUID.randomUUID();
@@ -223,22 +198,9 @@ public class TokenGeneratorServiceTest {
 
         when(this.userRepo.findById(userId)).thenReturn(Optional.empty());
 
-        LoginResult result = this.service.refresh(invalidToken);
-        assertFailureContains(result, UserNotFoundException.class);
+        assertThatThrownBy(() -> this.service.refresh(invalidToken))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("User with id " + userId + " was not found in the domain.")
+                .hasNoCause();
     }
-
-    /**
-     * Perform a check that the result is a failure and contains the expected exception.
-     * @param result the result to check.
-     * @param exceptionClass the expected exception class.
-     * @param <T> the type of the expected exception.
-     */
-    private <T extends Throwable> void assertFailureContains(LoginResult result, Class<T> exceptionClass) {
-        assertThat(result).isInstanceOf(LoginResult.Failure.class)
-                .asInstanceOf(InstanceOfAssertFactories.type(LoginResult.Failure.class))
-                .satisfies(failure -> assertThat(failure.exception())
-                        .as("Failure should contain an exception of type " + exceptionClass.getSimpleName())
-                        .isInstanceOf(exceptionClass));
-    }
-
 }

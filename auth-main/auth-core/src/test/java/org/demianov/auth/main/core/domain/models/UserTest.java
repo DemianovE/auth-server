@@ -32,7 +32,7 @@ public class UserTest {
     private PasswordHasherPort passwordHasher;
 
     private final UUID id = UUID.randomUUID();
-    private final Email email = new Email("max.mustermann@demianov.org");
+    private final Email email = Email.of("max.mustermann@demianov.org");
     private final String hashedPass = "hashedPassword";
 
     @Test

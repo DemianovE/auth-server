@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class LoginCommandTest {
-    private final Email email = new Email("test@demianov.org");
+    private final Email email = Email.of("test@demianov.org");
     private final String password = "password";
 
     @Test

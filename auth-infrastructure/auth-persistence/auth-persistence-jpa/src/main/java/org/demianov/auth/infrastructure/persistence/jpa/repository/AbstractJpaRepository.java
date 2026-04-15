@@ -81,7 +81,7 @@ public abstract class AbstractJpaRepository<T extends AbstractAuditEntity, ID> {
         try {
             T proxy = this.entityManager.getReference(this.entityClass, id);
             this.entityManager.remove(proxy);
-        } catch (Exception ignored) {
+        } catch (EntityNotFoundException | PersistenceException ignored) {
         }
     }
 

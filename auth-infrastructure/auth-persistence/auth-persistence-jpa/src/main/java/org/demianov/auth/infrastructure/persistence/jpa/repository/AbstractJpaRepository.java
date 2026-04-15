@@ -3,6 +3,7 @@ package org.demianov.auth.infrastructure.persistence.jpa.repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+import jakarta.persistence.PersistenceException;
 import org.demianov.auth.infrastructure.persistence.jpa.entities.AbstractAuditEntity;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,7 +82,7 @@ public abstract class AbstractJpaRepository<T extends AbstractAuditEntity, ID> {
         try {
             T proxy = this.entityManager.getReference(this.entityClass, id);
             this.entityManager.remove(proxy);
-        } catch (EntityNotFoundException | PersistenceException ignored) {
+        } catch (PersistenceException ignored) {
         }
     }
 

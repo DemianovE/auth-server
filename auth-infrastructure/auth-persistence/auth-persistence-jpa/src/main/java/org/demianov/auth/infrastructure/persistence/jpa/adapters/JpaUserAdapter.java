@@ -30,12 +30,12 @@ public final class JpaUserAdapter
 
     /**
      * Constructor.
-     * @param jpaRepository the JPA user repository.
+     * @param jpaRepositoryParam the JPA user repository.
      */
     public JpaUserAdapter(
-            final JpaUserRepository jpaRepository) {
+            final JpaUserRepository jpaRepositoryParam) {
         super(DataAccessException::new);
-        this.jpaRepository = jpaRepository;
+        this.jpaRepository = jpaRepositoryParam;
     }
 
     @Override

@@ -30,12 +30,12 @@ public final class JpaRefreshTokenAdapter
 
     /**
      * Constructor.
-     * @param jpaRepository the JPA refresh token repository.
+     * @param jpaRepositoryParam the JPA refresh token repository.
      */
     public JpaRefreshTokenAdapter(
-            final JpaRefreshTokenRepository jpaRepository) {
+            final JpaRefreshTokenRepository jpaRepositoryParam) {
         super(DataAccessException::new);
-        this.jpaRepository = jpaRepository;
+        this.jpaRepository = jpaRepositoryParam;
     }
 
     @Override

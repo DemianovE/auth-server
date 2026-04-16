@@ -1,6 +1,7 @@
 package org.demianov.auth.infrastructure.jwt;
 import org.demianov.auth.main.core.domain.models.User;
 import org.demianov.auth.main.core.exceptions.models.token.TokenInvalidException;
+import org.demianov.auth.main.core.exceptions.ports.TokenInspectorPortException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,8 +52,8 @@ public class JwtTokenGeneratorTest {
     }
 
     @Test
-    @DisplayName("Should throw TokenInvalidException for late token")
-    void extractUserId_TokenInvalidException_ExpiredToken() {
+    @DisplayName("Should throw TokenInspectorPortException for late token")
+    void extractUserId_TokenInspectorPortException_ExpiredToken() {
         UUID userId = UUID.randomUUID();
         User user = mock(User.class);
         when(user.getId()).thenReturn(userId);
@@ -63,13 +64,13 @@ public class JwtTokenGeneratorTest {
         JwtTokenGenerator futureGenerator = new JwtTokenGenerator(base64Secret, tokenTtl, futureClock);
 
         assertThatThrownBy(() -> futureGenerator.extractUserId(token))
-                .isInstanceOf(TokenInvalidException.class)
-                .hasMessage("Token has expired.");
+                .isInstanceOf(TokenInspectorPortException.class)
+                .hasMessage("Error occurred while extracting user id from token.");
     }
 
     @Test
-    @DisplayName("Should throw TokenInvalidException when signature is tampered")
-    void extractUserId_TokenInvalidException_SignatureTampered() {
+    @DisplayName("Should throw TokenInspectorPortException when signature is tampered")
+    void extractUserId_TokenInspectorPortException_SignatureTampered() {
         UUID userId = UUID.randomUUID();
         User user = mock(User.class);
         when(user.getId()).thenReturn(userId);
@@ -79,18 +80,18 @@ public class JwtTokenGeneratorTest {
         String tamperedToken = token.substring(0, token.length() - 1);
 
         assertThatThrownBy(() -> generator.extractUserId(tamperedToken))
-                .isInstanceOf(TokenInvalidException.class)
-                .hasMessage("Token signature is invalid.");
+                .isInstanceOf(TokenInspectorPortException.class)
+                .hasMessage("Error occurred while extracting user id from token.");
     }
 
     @Test
-    @DisplayName("Should throw TokenInvalidException when token format is invalid")
-    void extractUserId_TokenInvalidException_InvalidFormat() {
+    @DisplayName("Should throw TokenInspectorPortException when token format is invalid")
+    void extractUserId_TokenInspectorPortException_InvalidFormat() {
         String invalidToken = "invalid-token";
 
         assertThatThrownBy(() -> generator.extractUserId(invalidToken))
-                .isInstanceOf(TokenInvalidException.class)
-                .hasMessage("Token format is invalid.");
+                .isInstanceOf(TokenInspectorPortException.class)
+                .hasMessage("Error occurred while extracting user id from token.");
     }
 
     @Test

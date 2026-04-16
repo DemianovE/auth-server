@@ -1,4 +1,5 @@
 package org.demianov.auth.infrastructure.crypto;
+import org.demianov.auth.main.core.exceptions.ports.PasswordHasherPortException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,12 +48,12 @@ public class BCryptPasswordHasherTest {
     }
 
     @Test
-    @DisplayName("Should handle null inputs gracefully or throw expected exceptions")
+    @DisplayName("Should always throw PasswordHasherPortException with cause.")
     void verify_NullInputs() {
         String hash = hasher.hash("raw");
 
-        assertThatThrownBy(() -> hasher.verify(null, null)).isInstanceOf(NullPointerException.class);
-        assertThatThrownBy(() -> hasher.verify(hash, null)).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> hasher.verify(null, hash)).isInstanceOf(NullPointerException.class);
+        assertThatThrownBy(() -> hasher.verify(null, null)).isInstanceOf(PasswordHasherPortException.class);
+        assertThatThrownBy(() -> hasher.verify(hash, null)).isInstanceOf(PasswordHasherPortException.class);
+        assertThatThrownBy(() -> hasher.verify(null, hash)).isInstanceOf(PasswordHasherPortException.class);
     }
 }

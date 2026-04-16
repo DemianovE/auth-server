@@ -1,6 +1,8 @@
 package org.demianov.auth.infrastructure.crypto;
 
+import org.demianov.auth.main.core.application.ports.out.common.AbstractGuard;
 import org.demianov.auth.main.core.application.ports.out.security.PasswordHasherPort;
+import org.demianov.auth.main.core.exceptions.ports.PasswordHasherPortException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 /**
@@ -11,26 +13,32 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
  * </p>
  * @since 0.1.0-alpha
  */
-public class BCryptPasswordHasher implements PasswordHasherPort {
+public class BCryptPasswordHasher
+        extends AbstractGuard<PasswordHasherPortException>
+        implements PasswordHasherPort {
 
     /**
-     * Hash the raw password.
-     * @param raw  raw password String.
-     * @return BCrypt hashed password.
+     * Constructor.
      */
-    @Override
-    public String hash(final String raw) {
-        return BCrypt.hashpw(raw, BCrypt.gensalt());
+    public BCryptPasswordHasher() {
+        super(PasswordHasherPortException::new);
     }
 
     /**
-     * Verify the raw password against the hashed password.
-     * @param raw raw password String.
-     * @param hash hashed password.
-     * @return true if the raw password matches the hashed password.
+     * {@inheritDoc}
+     */
+    @Override
+    public String hash(final String raw) {
+        return guard(() -> BCrypt.hashpw(raw, BCrypt.gensalt()),
+                "Error occurred while hashing the password.");
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     public boolean verify(final String raw, final String hash) {
-        return BCrypt.checkpw(raw, hash);
+        return guard(() -> BCrypt.checkpw(raw, hash),
+                "Error occurred while verifying the password.");
     }
 }

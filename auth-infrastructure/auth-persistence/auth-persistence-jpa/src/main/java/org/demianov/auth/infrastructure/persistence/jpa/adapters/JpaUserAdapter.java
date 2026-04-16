@@ -1,10 +1,11 @@
 package org.demianov.auth.infrastructure.persistence.jpa.adapters;
 
-import lombok.AllArgsConstructor;
+import org.demianov.auth.main.core.application.ports.out.common.AbstractGuard;
 import org.demianov.auth.main.core.application.ports.out.persistence.UserRepoPort;
 import org.demianov.auth.main.core.domain.models.User;
 import org.demianov.auth.infrastructure.persistence.jpa.mapper.JpaUserMapper;
 import org.demianov.auth.infrastructure.persistence.jpa.repository.JpaUserRepository;
+import org.demianov.auth.main.core.exceptions.DataAccessException;
 import org.demianov.auth.main.kernel.domain.models.Email;
 
 import java.util.Optional;
@@ -20,13 +21,22 @@ import java.util.UUID;
  * @see JpaUserRepository
  * @since 0.1.0-alpha
  */
-@AllArgsConstructor
 public final class JpaUserAdapter
-        extends AbstractJpaAdapter
+        extends AbstractGuard<DataAccessException>
         implements UserRepoPort {
 
     /** The JPA user repository. */
     private final JpaUserRepository jpaRepository;
+
+    /**
+     * Constructor.
+     * @param jpaRepository the JPA user repository.
+     */
+    public JpaUserAdapter(
+            final JpaUserRepository jpaRepository) {
+        super(DataAccessException::new);
+        this.jpaRepository = jpaRepository;
+    }
 
     @Override
     public Optional<User> findByEmail(final Email email) {

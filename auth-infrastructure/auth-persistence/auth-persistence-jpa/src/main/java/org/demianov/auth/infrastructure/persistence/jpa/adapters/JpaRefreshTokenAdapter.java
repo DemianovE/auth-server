@@ -1,10 +1,11 @@
 package org.demianov.auth.infrastructure.persistence.jpa.adapters;
 
-import lombok.AllArgsConstructor;
+import org.demianov.auth.main.core.application.ports.out.common.AbstractGuard;
 import org.demianov.auth.main.core.application.ports.out.persistence.RefreshTokenRepoPort;
 import org.demianov.auth.main.core.domain.models.RefreshToken;
 import org.demianov.auth.infrastructure.persistence.jpa.mapper.JpaRefreshTokenMapper;
 import org.demianov.auth.infrastructure.persistence.jpa.repository.JpaRefreshTokenRepository;
+import org.demianov.auth.main.core.exceptions.DataAccessException;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,13 +21,22 @@ import java.util.UUID;
  * @see JpaRefreshTokenRepository
  * @since 0.1.0-alpha
  */
-@AllArgsConstructor
 public final class JpaRefreshTokenAdapter
-        extends AbstractJpaAdapter
+        extends AbstractGuard<DataAccessException>
         implements RefreshTokenRepoPort {
 
     /** The JPA refresh token repository. */
     private final JpaRefreshTokenRepository jpaRepository;
+
+    /**
+     * Constructor.
+     * @param jpaRepository the JPA refresh token repository.
+     */
+    public JpaRefreshTokenAdapter(
+            final JpaRefreshTokenRepository jpaRepository) {
+        super(DataAccessException::new);
+        this.jpaRepository = jpaRepository;
+    }
 
     @Override
     public Optional<RefreshToken> findByToken(final String token) {

@@ -13,4 +13,5 @@ module auth.core {
     opens org.demianov.auth.main.core.application.services.domain_services to spring.core, spring.beans, spring.context;
     opens org.demianov.auth.main.core.application.services.use_case.login to spring.core, spring.beans, spring.context;
     exports org.demianov.auth.main.core.application.ports.out.listeners;
+    exports org.demianov.auth.main.core.exceptions.models.token;
 }

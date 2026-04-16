@@ -9,9 +9,11 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import org.demianov.auth.main.core.application.ports.out.common.AbstractGuard;
 import org.demianov.auth.main.core.application.ports.out.security.TokenInspectorPort;
 import org.demianov.auth.main.core.domain.models.User;
 import org.demianov.auth.main.core.exceptions.models.token.TokenInvalidException;
+import org.demianov.auth.main.core.exceptions.ports.TokenInspectorPortException;
 
 import javax.crypto.SecretKey;
 import java.time.Clock;
@@ -23,7 +25,9 @@ import java.util.UUID;
 /**
  * Implementation of the TokenInspectorPort.
  */
-public class JwtTokenGenerator implements TokenInspectorPort {
+public class JwtTokenGenerator
+        extends AbstractGuard<TokenInspectorPortException>
+        implements TokenInspectorPort {
 
     /** The secret key used to sign the JWT token. */
     private final SecretKey key;
@@ -42,6 +46,8 @@ public class JwtTokenGenerator implements TokenInspectorPort {
             final String base64Secret,
             final Duration tokenTtlParams,
             final Clock clockParam) {
+        super(TokenInspectorPortException::new);
+
         this.tokenTtl = tokenTtlParams;
         this.clock = clockParam;
 
@@ -56,14 +62,15 @@ public class JwtTokenGenerator implements TokenInspectorPort {
      */
     @Override
     public String generateAccessToken(final User user) {
-        return Jwts.builder()
+        return guard(() -> Jwts.builder()
                 .subject(user.getId().toString())
                 .claim("ID", user.getId())
                 .issuedAt(Date.from(clock.instant()))
                 .expiration(
                         Date.from(clock.instant().plus(tokenTtl)))
                 .signWith(key)
-                .compact();
+                .compact(),
+                "Error occurred while generating access token.");
     }
 
     /**
@@ -73,6 +80,27 @@ public class JwtTokenGenerator implements TokenInspectorPort {
      */
     @Override
     public Optional<UUID> extractUserId(final String token) {
+        return guard(() -> performExtractUserId(token),
+                "Error occurred while extracting user id from token.");
+    }
+
+    /**
+     * Check if the token is valid.
+     * @param token token to check.
+     * @return true if the token is valid, false otherwise.
+     */
+    @Override
+    public boolean isValid(final String token) {
+        return guard(()-> extractUserId(token).isPresent(),
+                "Error occurred while checking if token is valid.");
+    }
+
+    /**
+     * Full uuid extraction function to acomodate {@code #guard()}
+     * @param token the token to extract the user id from.
+     * @return user id.
+     */
+    private Optional<UUID> performExtractUserId(final String token) {
         try {
             Claims claims = Jwts.parser()
                     .verifyWith(key)
@@ -95,15 +123,5 @@ public class JwtTokenGenerator implements TokenInspectorPort {
         } catch (Exception e) {
             return Optional.empty();
         }
-    }
-
-    /**
-     * Check if the token is valid.
-     * @param token token to check.
-     * @return true if the token is valid, false otherwise.
-     */
-    @Override
-    public boolean isValid(final String token) {
-        return extractUserId(token).isPresent();
     }
 }

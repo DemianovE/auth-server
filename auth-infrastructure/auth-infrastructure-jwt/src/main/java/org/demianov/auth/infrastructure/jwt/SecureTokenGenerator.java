@@ -1,6 +1,8 @@
 package org.demianov.auth.infrastructure.jwt;
 
+import org.demianov.auth.main.core.application.ports.out.common.AbstractGuard;
 import org.demianov.auth.main.core.application.ports.out.security.SecureStringGeneratorPort;
+import org.demianov.auth.main.core.exceptions.ports.SecureStringGeneratorPortException;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -8,7 +10,9 @@ import java.util.Base64;
 /**
  * Secure token generator.
  */
-public class SecureTokenGenerator implements SecureStringGeneratorPort {
+public class SecureTokenGenerator
+        extends AbstractGuard<SecureStringGeneratorPortException>
+        implements SecureStringGeneratorPort {
     /** Secure random generator. */
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
     /** Base64 encoder. */
@@ -32,6 +36,7 @@ public class SecureTokenGenerator implements SecureStringGeneratorPort {
      * @param byteLengthParam 16, 24, 32
      */
     public SecureTokenGenerator(final int byteLengthParam) {
+        super(SecureStringGeneratorPortException::new);
         this.byteLength = byteLengthParam;
     }
 
@@ -41,6 +46,16 @@ public class SecureTokenGenerator implements SecureStringGeneratorPort {
      */
     @Override
     public String generate() {
+        return guard(this::performGenerate,
+                "Error occurred during generation of the secure random string.");
+    }
+
+    /**
+     * Private method to generate the secure random string.
+     * To accompany guard.
+     * @return secure random string.
+     */
+    private String performGenerate() {
         byte[] randomBytes = new byte[byteLength];
         SECURE_RANDOM.nextBytes(randomBytes);
         return ENCODER.encodeToString(randomBytes);

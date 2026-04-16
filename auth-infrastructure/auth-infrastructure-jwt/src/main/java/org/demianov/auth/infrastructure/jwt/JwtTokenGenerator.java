@@ -91,12 +91,12 @@ public class JwtTokenGenerator
      */
     @Override
     public boolean isValid(final String token) {
-        return guard(()-> extractUserId(token).isPresent(),
+        return guard(() -> extractUserId(token).isPresent(),
                 "Error occurred while checking if token is valid.");
     }
 
     /**
-     * Full uuid extraction function to acomodate {@code #guard()}
+     * Full uuid extraction function to acomodate {@code #guard()}.
      * @param token the token to extract the user id from.
      * @return user id.
      */

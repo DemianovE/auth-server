@@ -47,7 +47,8 @@ public class SecureTokenGenerator
     @Override
     public String generate() {
         return guard(this::performGenerate,
-                "Error occurred during generation of the secure random string.");
+                "Error occurred during generation of the "
+                        + "secure random string.");
     }
 
     /**
